@@ -1,0 +1,86 @@
+#version: '3'
+networks:
+    app-network:
+        external: true
+        driver: bridge
+        name: app-network
+services:
+  n8n:
+    #image: n8nio/n8n
+    build:
+        context: .
+        dockerfile: Dockerfile_n8n
+    hostname: n8n_local5678
+    container_name: n8n_local5678
+    restart: always
+    ports:
+        - "5678:5678"
+    environment:
+        - N8N_BASIC_AUTH_ACTIVE=true
+        - N8N_BASIC_AUTH_USER=admin
+        - N8N_BASIC_AUTH_PASSWORD=admin
+        - N8N_HOST=0.0.0.0
+        - N8N_PORT=5678
+    volumes:
+        - ./n8n_data:/home/node/.n8n
+    #depends_on:
+    #    - ollama
+    networks:
+      app-network:
+        aliases:
+            - n8n_local5678
+
+  ollama:
+    image: ollama/ollama
+    hostname: ollama_local11434
+    container_name: ollama_local11434
+    restart: always
+    ports:
+        - "11434:11434"
+    volumes:
+        - ./ollama_data:/root/.ollama
+    
+    networks:
+      app-network:
+        aliases:
+            - ollama_local11434
+        
+  postgres:
+    image: ankane/pgvector:latest
+    hostname: postgres_local5432
+    container_name: postgres_local5432
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: alpha_knowledge
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    # Optional: Initialize pgvector on startup
+    #command: ["postgres", "-c", "shared_preload_libraries=pgvector"]
+    networks:
+      app-network:
+        aliases:
+          - postgres_local5432
+        
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:${SQLSERVER_TAG}
+    container_name: mssql_local1433
+    hostname: mssql_local1433
+    restart: always
+    volumes:
+      - ./sqlserver/data:/var/opt/mssql/data:rw
+      - ./sqlserver/log:/var/opt/mssql/log:rw
+    ports:
+      - "1433:1433"
+      
+    env_file:
+      - ./sqlserver.env
+    networks:
+      app-network:
+        aliases:
+          - mssql_local1433
+  
+ 

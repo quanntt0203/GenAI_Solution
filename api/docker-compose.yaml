@@ -1,0 +1,30 @@
+#version: '3.8'
+networks:
+  alpha-network:
+    external: ${NETWORK_EXTERNAL}
+    name: ${NETWORK_NAME}
+    driver: ${NETWORK_DRIVER}
+services:
+    alpha-chatbot-api:
+        build:
+            context: .
+            args:
+                PYTHON_TAG: ${PYTHON_TAG}
+                APP_API_PORT: ${APP_API_PORT}
+        container_name: alpha-chatbot-api
+        hostname: alpha-chatbot-api
+        ports:
+            - 8088:8080
+        env_file:
+            - .env
+        volumes:
+            - alpha_chromadb:/app/data/alpha_chromadb
+        restart: always
+        networks:
+            alpha-network:
+                aliases:
+                    - alpha-chatbot-api
+                    
+volumes:
+    alpha_chromadb:
+        external: true

@@ -1,0 +1,8 @@
+streamlit
+ollama
+dotenv
+chromadb==0.5.20 # Vector Database
+sentence-transformers==3.3.1 # CrossEncoder Re-ranking
+PyMuPDF==1.24.14 # PDF Document loader
+langchain-community==0.3.7 # Utils for text splitting
+

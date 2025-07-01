@@ -1,0 +1,23 @@
+#version: '3.8'
+networks:
+  alpha-network:
+    external: ${NETWORK_EXTERNAL}
+    name: ${NETWORK_NAME}
+    driver: ${NETWORK_DRIVER}
+services:
+    knowledgebase:
+        build:
+            context: .
+            args:
+                PYTHON_TAG: ${PYTHON_TAG}
+        container_name: alpha-knowledgebase
+        hostname: alpha-knowledgebase
+        ports:
+            - 8889:8889
+        env_file:
+            - .env
+        restart: always
+        networks:
+            alpha-network:
+                aliases:
+                    - alpha-knowledgebase

@@ -1,0 +1,18 @@
+FROM n8nio/n8n:latest
+
+USER root
+
+# Install Python + build dependencies + ODBC
+RUN apk update && \
+    apk add --no-cache \
+    python3 \
+    py3-pip \
+    g++ \
+    gcc \
+    make \
+	musl-dev \
+	unixodbc-dev \
+    && ln -sf python3 /usr/bin/python
+
+USER root
+WORKDIR /data

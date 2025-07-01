@@ -1,0 +1,20 @@
+#version: '3.8'
+networks:
+  alpha-network:
+    external: ${NETWORK_EXTERNAL}
+    name: ${NETWORK_NAME}
+    driver: ${NETWORK_DRIVER}
+services:
+    chatbot:
+        build: .
+        container_name: alpha-chatbot
+        hostname: alpha-chatbot
+        ports:
+            - 8888:8888
+        env_file:
+            - .env
+        restart: always
+        networks:
+            alpha-network:
+                aliases:
+                    - alpha-chatbot
