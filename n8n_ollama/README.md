@@ -22,7 +22,7 @@ This project provides a containerized environment for running [n8n](https://n8n.
 
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/quanntt0203/GenAI_Solution.git
    cd GenAI_Solution/n8n_ollama
    ```
 
